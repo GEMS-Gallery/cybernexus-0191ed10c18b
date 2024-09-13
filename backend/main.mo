@@ -1,6 +1,7 @@
 import Hash "mo:base/Hash";
 
 import Array "mo:base/Array";
+import Debug "mo:base/Debug";
 import HashMap "mo:base/HashMap";
 import Iter "mo:base/Iter";
 import Nat "mo:base/Nat";
@@ -79,11 +80,13 @@ actor {
 
     // Public functions
     public query func getCategoriesInfo() : async [CategoryInfo] {
+        Debug.print("Getting categories info");
         Array.map<Category, CategoryInfo>(categories, func (category) {
             let categoryPosts = Array.filter<Post>(Iter.toArray(posts.vals()), func (post) {
                 post.category == category.name
             });
             let postCount = categoryPosts.size();
+            Debug.print("Category: " # category.name # ", Post count: " # Nat.toText(postCount));
             let recentPost = if (postCount > 0) {
                 ?Array.sort<Post>(categoryPosts, func (a, b) { compareTime(b.createdAt, a.createdAt) })[0]
             } else {
@@ -108,6 +111,7 @@ actor {
             createdAt = Time.now();
         };
         posts.put(postId, post);
+        Debug.print("Created post: " # Nat.toText(postId) # " in category: " # category);
         postId
     };
 
@@ -119,6 +123,7 @@ actor {
         let filteredPosts = Array.filter<Post>(Iter.toArray(posts.vals()), func (post) {
             post.category == category
         });
+        Debug.print("Getting posts for category: " # category # ", Count: " # Nat.toText(filteredPosts.size()));
         filteredPosts
     };
 
@@ -140,5 +145,13 @@ actor {
             comment.postId == postId
         });
         filteredComments
+    };
+
+    // Test function to create sample posts
+    public func createSamplePosts() : async () {
+        ignore await createPost("Red Team", "Sample Red Team Post", "This is a sample post for the Red Team category.");
+        ignore await createPost("Pen Testing", "Sample Pen Testing Post", "This is a sample post for the Pen Testing category.");
+        ignore await createPost("Cryptography", "Sample Cryptography Post", "This is a sample post for the Cryptography category.");
+        Debug.print("Sample posts created");
     };
 }

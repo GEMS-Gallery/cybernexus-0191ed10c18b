@@ -12,7 +12,13 @@ function formatDate(timestamp) {
 
 async function init() {
     try {
+        // Create sample posts for testing
+        await backend.createSamplePosts();
+        console.log("Sample posts created");
+
         const categoriesInfo = await backend.getCategoriesInfo();
+        console.log("Categories info:", categoriesInfo);
+
         const categoriesList = document.getElementById('categories');
         categoriesInfo.forEach(info => {
             const li = document.createElement('li');
@@ -53,16 +59,22 @@ async function loadCategory(category) {
 
     try {
         const posts = await backend.getPostsByCategory(category);
-        posts.forEach(post => {
-            const postElement = document.createElement('div');
-            postElement.className = 'post';
-            postElement.innerHTML = `
-                <h3>${post.title || 'Untitled'}</h3>
-                <p>${post.content.substring(0, 100)}...</p>
-                <button onclick="loadPost(${post.id})">Read More</button>
-            `;
-            mainContent.appendChild(postElement);
-        });
+        console.log(`Posts for category ${category}:`, posts);
+
+        if (posts.length === 0) {
+            mainContent.innerHTML += '<p>No posts in this category yet.</p>';
+        } else {
+            posts.forEach(post => {
+                const postElement = document.createElement('div');
+                postElement.className = 'post';
+                postElement.innerHTML = `
+                    <h3>${post.title || 'Untitled'}</h3>
+                    <p>${post.content.substring(0, 100)}...</p>
+                    <button onclick="loadPost(${post.id})">Read More</button>
+                `;
+                mainContent.appendChild(postElement);
+            });
+        }
 
         const newPostForm = document.createElement('form');
         newPostForm.innerHTML = `
@@ -86,6 +98,8 @@ async function loadPost(postId) {
 
     try {
         const post = await backend.getPost(postId);
+        console.log(`Post ${postId}:`, post);
+
         if (post) {
             const postElement = document.createElement('div');
             postElement.className = 'post';
@@ -126,6 +140,7 @@ async function createPost(event) {
     const content = document.getElementById('post-content').value;
     try {
         await backend.createPost(currentCategory, title, content);
+        console.log(`Post created in category ${currentCategory}`);
         loadCategory(currentCategory);
     } catch (error) {
         console.error('Error creating post:', error);
@@ -138,6 +153,7 @@ async function createComment(event) {
     const content = document.getElementById('comment-content').value;
     try {
         await backend.addComment(currentPost, content);
+        console.log(`Comment added to post ${currentPost}`);
         loadPost(currentPost);
     } catch (error) {
         console.error('Error creating comment:', error);
