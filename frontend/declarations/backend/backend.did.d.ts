@@ -7,6 +7,11 @@ export interface Category {
   'name' : string,
   'description' : string,
 }
+export interface CategoryInfo {
+  'postCount' : bigint,
+  'recentPost' : [] | [Post],
+  'category' : Category,
+}
 export interface Comment {
   'id' : CommentId,
   'content' : string,
@@ -28,7 +33,7 @@ export type Time = bigint;
 export interface _SERVICE {
   'addComment' : ActorMethod<[PostId, string], CommentId>,
   'createPost' : ActorMethod<[string, string, string], PostId>,
-  'getCategories' : ActorMethod<[], Array<Category>>,
+  'getCategoriesInfo' : ActorMethod<[], Array<CategoryInfo>>,
   'getCommentsByPost' : ActorMethod<[PostId], Array<Comment>>,
   'getPost' : ActorMethod<[PostId], [] | [Post]>,
   'getPostsByCategory' : ActorMethod<[string], Array<Post>>,

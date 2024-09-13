@@ -4,27 +4,33 @@ let currentCategory = null;
 let currentPost = null;
 
 async function init() {
-    const categories = await backend.getCategories();
+    const categoriesInfo = await backend.getCategoriesInfo();
     const categoriesList = document.getElementById('categories');
-    categories.forEach(category => {
+    categoriesInfo.forEach(info => {
         const li = document.createElement('li');
-        const a = document.createElement('a');
-        a.href = '#';
-        a.innerHTML = `
-            <span class="category-icon">${category.icon}</span>
-            <div class="category-info">
-                <span class="category-name">${category.name}</span>
-                <span class="category-description">${category.description}</span>
+        li.innerHTML = `
+            <div class="category-header">
+                <span class="category-icon">${info.category.icon}</span>
+                <span class="category-name">${info.category.name}</span>
             </div>
+            <div class="category-description">${info.category.description}</div>
+            <div class="category-stats">
+                <span>Posts: ${info.postCount}</span>
+                <span>Last updated: ${info.recentPost ? new Date(Number(info.recentPost.createdAt) / 1000000).toLocaleString() : 'N/A'}</span>
+            </div>
+            ${info.recentPost ? `
+                <div class="recent-post">
+                    <strong>Recent post:</strong> ${info.recentPost.title}
+                </div>
+            ` : ''}
         `;
-        a.onclick = () => loadCategory(category.name);
-        li.appendChild(a);
+        li.onclick = () => loadCategory(info.category.name);
         categoriesList.appendChild(li);
     });
 
     // Load the first category by default
-    if (categories.length > 0) {
-        loadCategory(categories[0].name);
+    if (categoriesInfo.length > 0) {
+        loadCategory(categoriesInfo[0].category.name);
     }
 }
 

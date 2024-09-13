@@ -8,6 +8,7 @@ import Option "mo:base/Option";
 import Principal "mo:base/Principal";
 import Text "mo:base/Text";
 import Time "mo:base/Time";
+import Int "mo:base/Int";
 
 actor {
     // Types
@@ -37,6 +38,12 @@ actor {
         icon: Text;
     };
 
+    type CategoryInfo = {
+        category: Category;
+        postCount: Nat;
+        recentPost: ?Post;
+    };
+
     // State
     stable var nextPostId : PostId = 0;
     stable var nextCommentId : CommentId = 0;
@@ -64,9 +71,30 @@ actor {
         nextCommentId
     };
 
+    func compareTime(a: Time.Time, b: Time.Time) : {#less; #equal; #greater} {
+        if (a < b) { #less }
+        else if (a > b) { #greater }
+        else { #equal }
+    };
+
     // Public functions
-    public query func getCategories() : async [Category] {
-        categories
+    public query func getCategoriesInfo() : async [CategoryInfo] {
+        Array.map<Category, CategoryInfo>(categories, func (category) {
+            let categoryPosts = Array.filter<Post>(Iter.toArray(posts.vals()), func (post) {
+                post.category == category.name
+            });
+            let postCount = categoryPosts.size();
+            let recentPost = if (postCount > 0) {
+                ?Array.sort<Post>(categoryPosts, func (a, b) { compareTime(b.createdAt, a.createdAt) })[0]
+            } else {
+                null
+            };
+            {
+                category = category;
+                postCount = postCount;
+                recentPost = recentPost;
+            }
+        })
     };
 
     public shared(msg) func createPost(category: Text, title: Text, content: Text) : async PostId {
