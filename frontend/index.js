@@ -6,7 +6,7 @@ let currentPost = null;
 function formatDate(timestamp) {
     if (!timestamp) return 'N/A';
     // Convert nanoseconds to milliseconds
-    const date = new Date(Number(timestamp) / 1000000);
+    const date = new Date(Number(timestamp));
     return date.toLocaleString();
 }
 
@@ -25,10 +25,20 @@ async function init() {
         const samplePostIds = await backend.createSamplePosts();
         console.log("Sample posts created with IDs:", customStringify(samplePostIds));
 
+        await refreshCategories();
+    } catch (error) {
+        console.error('Error initializing the app:', error);
+    }
+}
+
+async function refreshCategories() {
+    try {
         const categoriesInfo = await backend.getCategoriesInfo();
         console.log("Categories info:", customStringify(categoriesInfo));
 
         const categoriesList = document.getElementById('categories');
+        categoriesList.innerHTML = ''; // Clear existing categories
+
         categoriesInfo.forEach(info => {
             const li = document.createElement('li');
             li.innerHTML = `
@@ -56,7 +66,7 @@ async function init() {
             loadCategory(categoriesInfo[0].category.name);
         }
     } catch (error) {
-        console.error('Error initializing the app:', error);
+        console.error('Error refreshing categories:', error);
     }
 }
 
@@ -79,7 +89,7 @@ async function loadCategory(category) {
                 postElement.innerHTML = `
                     <h3>${post.title || 'Untitled'}</h3>
                     <p>${post.content.substring(0, 100)}...</p>
-                    <button onclick="loadPost(${post.id})">Read More</button>
+                    <button onclick="window.loadPost(${post.id})">Read More</button>
                 `;
                 mainContent.appendChild(postElement);
             });
@@ -115,6 +125,7 @@ async function loadPost(postId) {
             postElement.innerHTML = `
                 <h2>${post.title || 'Untitled'}</h2>
                 <p>${post.content}</p>
+                <p>Created at: ${formatDate(post.createdAt)}</p>
             `;
             mainContent.appendChild(postElement);
 
@@ -122,7 +133,10 @@ async function loadPost(postId) {
             comments.forEach(comment => {
                 const commentElement = document.createElement('div');
                 commentElement.className = 'comment';
-                commentElement.textContent = comment.content;
+                commentElement.innerHTML = `
+                    <p>${comment.content}</p>
+                    <p>Created at: ${formatDate(comment.createdAt)}</p>
+                `;
                 mainContent.appendChild(commentElement);
             });
 
@@ -150,6 +164,7 @@ async function createPost(event) {
     try {
         const postId = await backend.createPost(currentCategory, title, content);
         console.log(`Post created in category ${currentCategory} with ID: ${postId}`);
+        await refreshCategories(); // Refresh categories to update recent post
         loadCategory(currentCategory);
     } catch (error) {
         console.error('Error creating post:', error);

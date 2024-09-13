@@ -24,7 +24,7 @@ actor {
         title: Text;
         content: Text;
         author: Principal;
-        createdAt: Text; // Changed to Text
+        createdAt: Text; // Timestamp as Text
     };
 
     type Comment = {
@@ -32,7 +32,7 @@ actor {
         postId: PostId;
         content: Text;
         author: Principal;
-        createdAt: Text; // Changed to Text
+        createdAt: Text; // Timestamp as Text
     };
 
     type Category = {
