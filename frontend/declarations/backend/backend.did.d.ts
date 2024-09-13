@@ -32,7 +32,7 @@ export type PostId = bigint;
 export interface _SERVICE {
   'addComment' : ActorMethod<[PostId, string], CommentId>,
   'createPost' : ActorMethod<[string, string, string], PostId>,
-  'createSamplePosts' : ActorMethod<[], undefined>,
+  'createSamplePosts' : ActorMethod<[], Array<PostId>>,
   'getCategoriesInfo' : ActorMethod<[], Array<CategoryInfo>>,
   'getCommentsByPost' : ActorMethod<[PostId], Array<Comment>>,
   'getPost' : ActorMethod<[PostId], [] | [Post]>,

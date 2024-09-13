@@ -32,7 +32,7 @@ type Category =
 service : {
   addComment: (PostId, text) -> (CommentId);
   createPost: (text, text, text) -> (PostId);
-  createSamplePosts: () -> ();
+  createSamplePosts: () -> (vec PostId);
   getCategoriesInfo: () -> (vec CategoryInfo) query;
   getCommentsByPost: (PostId) -> (vec Comment) query;
   getPost: (PostId) -> (opt Post) query;

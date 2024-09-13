@@ -29,7 +29,7 @@ export const idlFactory = ({ IDL }) => {
   return IDL.Service({
     'addComment' : IDL.Func([PostId, IDL.Text], [CommentId], []),
     'createPost' : IDL.Func([IDL.Text, IDL.Text, IDL.Text], [PostId], []),
-    'createSamplePosts' : IDL.Func([], [], []),
+    'createSamplePosts' : IDL.Func([], [IDL.Vec(PostId)], []),
     'getCategoriesInfo' : IDL.Func([], [IDL.Vec(CategoryInfo)], ['query']),
     'getCommentsByPost' : IDL.Func([PostId], [IDL.Vec(Comment)], ['query']),
     'getPost' : IDL.Func([PostId], [IDL.Opt(Post)], ['query']),

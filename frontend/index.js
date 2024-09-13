@@ -13,11 +13,11 @@ function formatDate(timestamp) {
 async function init() {
     try {
         // Create sample posts for testing
-        await backend.createSamplePosts();
-        console.log("Sample posts created");
+        const samplePostIds = await backend.createSamplePosts();
+        console.log("Sample posts created with IDs:", samplePostIds);
 
         const categoriesInfo = await backend.getCategoriesInfo();
-        console.log("Categories info:", categoriesInfo);
+        console.log("Categories info:", JSON.stringify(categoriesInfo, null, 2));
 
         const categoriesList = document.getElementById('categories');
         categoriesInfo.forEach(info => {
@@ -59,7 +59,7 @@ async function loadCategory(category) {
 
     try {
         const posts = await backend.getPostsByCategory(category);
-        console.log(`Posts for category ${category}:`, posts);
+        console.log(`Posts for category ${category}:`, JSON.stringify(posts, null, 2));
 
         if (posts.length === 0) {
             mainContent.innerHTML += '<p>No posts in this category yet.</p>';
@@ -98,7 +98,7 @@ async function loadPost(postId) {
 
     try {
         const post = await backend.getPost(postId);
-        console.log(`Post ${postId}:`, post);
+        console.log(`Post ${postId}:`, JSON.stringify(post, null, 2));
 
         if (post) {
             const postElement = document.createElement('div');
@@ -139,8 +139,8 @@ async function createPost(event) {
     const title = document.getElementById('post-title').value;
     const content = document.getElementById('post-content').value;
     try {
-        await backend.createPost(currentCategory, title, content);
-        console.log(`Post created in category ${currentCategory}`);
+        const postId = await backend.createPost(currentCategory, title, content);
+        console.log(`Post created in category ${currentCategory} with ID: ${postId}`);
         loadCategory(currentCategory);
     } catch (error) {
         console.error('Error creating post:', error);
@@ -152,8 +152,8 @@ async function createComment(event) {
     event.preventDefault();
     const content = document.getElementById('comment-content').value;
     try {
-        await backend.addComment(currentPost, content);
-        console.log(`Comment added to post ${currentPost}`);
+        const commentId = await backend.addComment(currentPost, content);
+        console.log(`Comment added to post ${currentPost} with ID: ${commentId}`);
         loadPost(currentPost);
     } catch (error) {
         console.error('Error creating comment:', error);

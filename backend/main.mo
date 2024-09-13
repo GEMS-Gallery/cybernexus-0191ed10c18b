@@ -88,10 +88,14 @@ actor {
             let postCount = categoryPosts.size();
             Debug.print("Category: " # category.name # ", Post count: " # Nat.toText(postCount));
             let recentPost = if (postCount > 0) {
-                ?Array.sort<Post>(categoryPosts, func (a, b) { compareTime(b.createdAt, a.createdAt) })[0]
+                let sortedPosts = Array.sort<Post>(categoryPosts, func (a, b) { 
+                    if (a.createdAt > b.createdAt) #less else if (a.createdAt < b.createdAt) #greater else #equal 
+                });
+                ?sortedPosts[0]
             } else {
                 null
             };
+            Debug.print("Recent post: " # debug_show(recentPost));
             {
                 category = category;
                 postCount = postCount;
@@ -148,10 +152,11 @@ actor {
     };
 
     // Test function to create sample posts
-    public func createSamplePosts() : async () {
-        ignore await createPost("Red Team", "Sample Red Team Post", "This is a sample post for the Red Team category.");
-        ignore await createPost("Pen Testing", "Sample Pen Testing Post", "This is a sample post for the Pen Testing category.");
-        ignore await createPost("Cryptography", "Sample Cryptography Post", "This is a sample post for the Cryptography category.");
-        Debug.print("Sample posts created");
+    public func createSamplePosts() : async [PostId] {
+        let post1 = await createPost("Red Team", "Sample Red Team Post", "This is a sample post for the Red Team category.");
+        let post2 = await createPost("Pen Testing", "Sample Pen Testing Post", "This is a sample post for the Pen Testing category.");
+        let post3 = await createPost("Cryptography", "Sample Cryptography Post", "This is a sample post for the Cryptography category.");
+        Debug.print("Sample posts created with IDs: " # debug_show([post1, post2, post3]));
+        [post1, post2, post3]
     };
 }
