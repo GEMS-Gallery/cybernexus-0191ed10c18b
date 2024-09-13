@@ -6,18 +6,27 @@ let currentPost = null;
 function formatDate(timestamp) {
     if (!timestamp) return 'N/A';
     // Convert nanoseconds to milliseconds
-    const date = new Date(Number(BigInt(timestamp) / BigInt(1000000)));
+    const date = new Date(Number(timestamp) / 1000000);
     return date.toLocaleString();
+}
+
+// Custom JSON stringify function to handle BigInt
+function customStringify(obj) {
+    return JSON.stringify(obj, (key, value) =>
+        typeof value === 'bigint'
+            ? value.toString()
+            : value
+    );
 }
 
 async function init() {
     try {
         // Create sample posts for testing
         const samplePostIds = await backend.createSamplePosts();
-        console.log("Sample posts created with IDs:", samplePostIds);
+        console.log("Sample posts created with IDs:", customStringify(samplePostIds));
 
         const categoriesInfo = await backend.getCategoriesInfo();
-        console.log("Categories info:", JSON.stringify(categoriesInfo, null, 2));
+        console.log("Categories info:", customStringify(categoriesInfo));
 
         const categoriesList = document.getElementById('categories');
         categoriesInfo.forEach(info => {
@@ -59,7 +68,7 @@ async function loadCategory(category) {
 
     try {
         const posts = await backend.getPostsByCategory(category);
-        console.log(`Posts for category ${category}:`, JSON.stringify(posts, null, 2));
+        console.log(`Posts for category ${category}:`, customStringify(posts));
 
         if (posts.length === 0) {
             mainContent.innerHTML += '<p>No posts in this category yet.</p>';
@@ -98,7 +107,7 @@ async function loadPost(postId) {
 
     try {
         const post = await backend.getPost(postId);
-        console.log(`Post ${postId}:`, JSON.stringify(post, null, 2));
+        console.log(`Post ${postId}:`, customStringify(post));
 
         if (post) {
             const postElement = document.createElement('div');

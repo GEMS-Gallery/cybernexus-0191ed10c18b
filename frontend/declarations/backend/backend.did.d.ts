@@ -15,7 +15,7 @@ export interface CategoryInfo {
 export interface Comment {
   'id' : CommentId,
   'content' : string,
-  'createdAt' : bigint,
+  'createdAt' : string,
   'author' : Principal,
   'postId' : PostId,
 }
@@ -24,7 +24,7 @@ export interface Post {
   'id' : PostId,
   'title' : string,
   'content' : string,
-  'createdAt' : bigint,
+  'createdAt' : string,
   'author' : Principal,
   'category' : string,
 }

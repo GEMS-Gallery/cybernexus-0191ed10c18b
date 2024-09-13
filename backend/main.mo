@@ -1,4 +1,6 @@
+import Char "mo:base/Char";
 import Hash "mo:base/Hash";
+import Nat32 "mo:base/Nat32";
 
 import Array "mo:base/Array";
 import Debug "mo:base/Debug";
@@ -22,7 +24,7 @@ actor {
         title: Text;
         content: Text;
         author: Principal;
-        createdAt: Int;
+        createdAt: Text; // Changed to Text
     };
 
     type Comment = {
@@ -30,7 +32,7 @@ actor {
         postId: PostId;
         content: Text;
         author: Principal;
-        createdAt: Int;
+        createdAt: Text; // Changed to Text
     };
 
     type Category = {
@@ -72,10 +74,21 @@ actor {
         nextCommentId
     };
 
-    func compareTime(a: Int, b: Int) : {#less; #equal; #greater} {
-        if (a < b) { #less }
-        else if (a > b) { #greater }
+    func compareTime(a: Text, b: Text) : {#less; #equal; #greater} {
+        let aInt = textToNat(a);
+        let bInt = textToNat(b);
+        if (aInt < bInt) { #less }
+        else if (aInt > bInt) { #greater }
         else { #equal }
+    };
+
+    func textToNat(t : Text) : Nat {
+        var n : Nat = 0;
+        for (c in t.chars()) {
+            assert(c >= '0' and c <= '9');
+            n := n * 10 + Nat32.toNat(Char.toNat32(c) - Char.toNat32('0'));
+        };
+        n
     };
 
     // Public functions
@@ -89,7 +102,7 @@ actor {
             Debug.print("Category: " # category.name # ", Post count: " # Nat.toText(postCount));
             let recentPost = if (postCount > 0) {
                 let sortedPosts = Array.sort<Post>(categoryPosts, func (a, b) { 
-                    if (a.createdAt > b.createdAt) #less else if (a.createdAt < b.createdAt) #greater else #equal 
+                    compareTime(b.createdAt, a.createdAt)
                 });
                 ?sortedPosts[0]
             } else {
@@ -112,7 +125,7 @@ actor {
             title = title;
             content = content;
             author = msg.caller;
-            createdAt = Time.now();
+            createdAt = Int.toText(Time.now());
         };
         posts.put(postId, post);
         Debug.print("Created post: " # Nat.toText(postId) # " in category: " # category);
@@ -138,7 +151,7 @@ actor {
             postId = postId;
             content = content;
             author = msg.caller;
-            createdAt = Time.now();
+            createdAt = Int.toText(Time.now());
         };
         comments.put(commentId, comment);
         commentId

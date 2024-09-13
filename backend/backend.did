@@ -4,7 +4,7 @@ type Post =
    author: principal;
    category: text;
    content: text;
-   createdAt: int;
+   createdAt: text;
    id: PostId;
    title: text;
  };
@@ -13,7 +13,7 @@ type Comment =
  record {
    author: principal;
    content: text;
-   createdAt: int;
+   createdAt: text;
    id: CommentId;
    postId: PostId;
  };

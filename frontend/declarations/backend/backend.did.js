@@ -5,7 +5,7 @@ export const idlFactory = ({ IDL }) => {
     'id' : PostId,
     'title' : IDL.Text,
     'content' : IDL.Text,
-    'createdAt' : IDL.Int,
+    'createdAt' : IDL.Text,
     'author' : IDL.Principal,
     'category' : IDL.Text,
   });
@@ -22,7 +22,7 @@ export const idlFactory = ({ IDL }) => {
   const Comment = IDL.Record({
     'id' : CommentId,
     'content' : IDL.Text,
-    'createdAt' : IDL.Int,
+    'createdAt' : IDL.Text,
     'author' : IDL.Principal,
     'postId' : PostId,
   });
