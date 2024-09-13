@@ -21,7 +21,7 @@ actor {
         title: Text;
         content: Text;
         author: Principal;
-        createdAt: Time.Time;
+        createdAt: Int;
     };
 
     type Comment = {
@@ -29,7 +29,7 @@ actor {
         postId: PostId;
         content: Text;
         author: Principal;
-        createdAt: Time.Time;
+        createdAt: Int;
     };
 
     type Category = {
@@ -71,7 +71,7 @@ actor {
         nextCommentId
     };
 
-    func compareTime(a: Time.Time, b: Time.Time) : {#less; #equal; #greater} {
+    func compareTime(a: Int, b: Int) : {#less; #equal; #greater} {
         if (a < b) { #less }
         else if (a > b) { #greater }
         else { #equal }

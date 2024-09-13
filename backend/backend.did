@@ -1,11 +1,10 @@
-type Time = int;
 type PostId = nat;
 type Post = 
  record {
    author: principal;
    category: text;
    content: text;
-   createdAt: Time;
+   createdAt: int;
    id: PostId;
    title: text;
  };
@@ -14,7 +13,7 @@ type Comment =
  record {
    author: principal;
    content: text;
-   createdAt: Time;
+   createdAt: int;
    id: CommentId;
    postId: PostId;
  };

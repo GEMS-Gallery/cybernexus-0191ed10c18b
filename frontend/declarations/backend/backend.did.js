@@ -1,12 +1,11 @@
 export const idlFactory = ({ IDL }) => {
   const PostId = IDL.Nat;
   const CommentId = IDL.Nat;
-  const Time = IDL.Int;
   const Post = IDL.Record({
     'id' : PostId,
     'title' : IDL.Text,
     'content' : IDL.Text,
-    'createdAt' : Time,
+    'createdAt' : IDL.Int,
     'author' : IDL.Principal,
     'category' : IDL.Text,
   });
@@ -23,7 +22,7 @@ export const idlFactory = ({ IDL }) => {
   const Comment = IDL.Record({
     'id' : CommentId,
     'content' : IDL.Text,
-    'createdAt' : Time,
+    'createdAt' : IDL.Int,
     'author' : IDL.Principal,
     'postId' : PostId,
   });

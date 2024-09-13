@@ -15,7 +15,7 @@ export interface CategoryInfo {
 export interface Comment {
   'id' : CommentId,
   'content' : string,
-  'createdAt' : Time,
+  'createdAt' : bigint,
   'author' : Principal,
   'postId' : PostId,
 }
@@ -24,12 +24,11 @@ export interface Post {
   'id' : PostId,
   'title' : string,
   'content' : string,
-  'createdAt' : Time,
+  'createdAt' : bigint,
   'author' : Principal,
   'category' : string,
 }
 export type PostId = bigint;
-export type Time = bigint;
 export interface _SERVICE {
   'addComment' : ActorMethod<[PostId, string], CommentId>,
   'createPost' : ActorMethod<[string, string, string], PostId>,
