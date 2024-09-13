@@ -1,0 +1,28 @@
+type Time = int;
+type PostId = nat;
+type Post = 
+ record {
+   author: principal;
+   category: text;
+   content: text;
+   createdAt: Time;
+   id: PostId;
+   title: text;
+ };
+type CommentId = nat;
+type Comment = 
+ record {
+   author: principal;
+   content: text;
+   createdAt: Time;
+   id: CommentId;
+   postId: PostId;
+ };
+service : {
+  addComment: (PostId, text) -> (CommentId);
+  createPost: (text, text, text) -> (PostId);
+  getCategories: () -> (vec text) query;
+  getCommentsByPost: (PostId) -> (vec Comment) query;
+  getPost: (PostId) -> (opt Post) query;
+  getPostsByCategory: (text) -> (vec Post) query;
+}
