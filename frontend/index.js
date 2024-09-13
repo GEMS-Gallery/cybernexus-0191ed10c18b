@@ -32,7 +32,7 @@ async function loadCategory(category) {
     currentCategory = category;
     currentPost = null;
     const mainContent = document.getElementById('main-content');
-    mainContent.innerHTML = '<h2>' + category + '</h2>';
+    mainContent.innerHTML = `<h2>${category}</h2>`;
 
     const posts = await backend.getPostsByCategory(category);
     posts.forEach(post => {
