@@ -31,11 +31,24 @@ actor {
         createdAt: Time.Time;
     };
 
+    type Category = {
+        name: Text;
+        description: Text;
+        icon: Text;
+    };
+
     // State
     stable var nextPostId : PostId = 0;
     stable var nextCommentId : CommentId = 0;
     
-    let categories : [Text] = ["Red Team", "Pen Testing", "Cryptography", "Network Security", "Web Security", "Malware Analysis"];
+    let categories : [Category] = [
+        { name = "Red Team"; description = "Offensive security and penetration testing"; icon = "🔴" },
+        { name = "Pen Testing"; description = "Techniques and tools for penetration testing"; icon = "🔍" },
+        { name = "Cryptography"; description = "Encryption, decryption, and cryptographic protocols"; icon = "🔐" },
+        { name = "Network Security"; description = "Securing networks and network protocols"; icon = "🌐" },
+        { name = "Web Security"; description = "Securing web applications and services"; icon = "🕸️" },
+        { name = "Malware Analysis"; description = "Analyzing and understanding malicious software"; icon = "🦠" }
+    ];
     
     let posts = HashMap.HashMap<PostId, Post>(0, Nat.equal, Hash.hash);
     let comments = HashMap.HashMap<CommentId, Comment>(0, Nat.equal, Hash.hash);
@@ -52,7 +65,7 @@ actor {
     };
 
     // Public functions
-    public query func getCategories() : async [Text] {
+    public query func getCategories() : async [Category] {
         categories
     };
 

@@ -1,6 +1,11 @@
 export const idlFactory = ({ IDL }) => {
   const PostId = IDL.Nat;
   const CommentId = IDL.Nat;
+  const Category = IDL.Record({
+    'icon' : IDL.Text,
+    'name' : IDL.Text,
+    'description' : IDL.Text,
+  });
   const Time = IDL.Int;
   const Comment = IDL.Record({
     'id' : CommentId,
@@ -20,7 +25,7 @@ export const idlFactory = ({ IDL }) => {
   return IDL.Service({
     'addComment' : IDL.Func([PostId, IDL.Text], [CommentId], []),
     'createPost' : IDL.Func([IDL.Text, IDL.Text, IDL.Text], [PostId], []),
-    'getCategories' : IDL.Func([], [IDL.Vec(IDL.Text)], ['query']),
+    'getCategories' : IDL.Func([], [IDL.Vec(Category)], ['query']),
     'getCommentsByPost' : IDL.Func([PostId], [IDL.Vec(Comment)], ['query']),
     'getPost' : IDL.Func([PostId], [IDL.Opt(Post)], ['query']),
     'getPostsByCategory' : IDL.Func([IDL.Text], [IDL.Vec(Post)], ['query']),

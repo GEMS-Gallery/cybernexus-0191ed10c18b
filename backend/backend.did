@@ -18,10 +18,16 @@ type Comment =
    id: CommentId;
    postId: PostId;
  };
+type Category = 
+ record {
+   description: text;
+   icon: text;
+   name: text;
+ };
 service : {
   addComment: (PostId, text) -> (CommentId);
   createPost: (text, text, text) -> (PostId);
-  getCategories: () -> (vec text) query;
+  getCategories: () -> (vec Category) query;
   getCommentsByPost: (PostId) -> (vec Comment) query;
   getPost: (PostId) -> (opt Post) query;
   getPostsByCategory: (text) -> (vec Post) query;

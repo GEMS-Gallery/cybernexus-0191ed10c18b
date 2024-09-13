@@ -2,6 +2,11 @@ import type { Principal } from '@dfinity/principal';
 import type { ActorMethod } from '@dfinity/agent';
 import type { IDL } from '@dfinity/candid';
 
+export interface Category {
+  'icon' : string,
+  'name' : string,
+  'description' : string,
+}
 export interface Comment {
   'id' : CommentId,
   'content' : string,
@@ -23,7 +28,7 @@ export type Time = bigint;
 export interface _SERVICE {
   'addComment' : ActorMethod<[PostId, string], CommentId>,
   'createPost' : ActorMethod<[string, string, string], PostId>,
-  'getCategories' : ActorMethod<[], Array<string>>,
+  'getCategories' : ActorMethod<[], Array<Category>>,
   'getCommentsByPost' : ActorMethod<[PostId], Array<Comment>>,
   'getPost' : ActorMethod<[PostId], [] | [Post]>,
   'getPostsByCategory' : ActorMethod<[string], Array<Post>>,
