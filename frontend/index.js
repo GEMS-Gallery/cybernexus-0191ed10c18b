@@ -6,7 +6,7 @@ let currentPost = null;
 function formatDate(timestamp) {
     if (!timestamp) return 'N/A';
     // Convert nanoseconds to milliseconds
-    const date = new Date(Number(timestamp));
+    const date = new Date(Number(timestamp) / 1000000);
     return date.toLocaleString();
 }
 
@@ -89,6 +89,7 @@ async function loadCategory(category) {
                 postElement.innerHTML = `
                     <h3>${post.title || 'Untitled'}</h3>
                     <p>${post.content.substring(0, 100)}...</p>
+                    <p>Created at: ${formatDate(post.createdAt)}</p>
                     <button onclick="window.loadPost(${post.id})">Read More</button>
                 `;
                 mainContent.appendChild(postElement);

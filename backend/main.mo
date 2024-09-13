@@ -108,7 +108,7 @@ actor {
             } else {
                 null
             };
-            Debug.print("Recent post: " # debug_show(recentPost));
+            Debug.print("Recent post for " # category.name # ": " # debug_show(recentPost));
             {
                 category = category;
                 postCount = postCount;
@@ -128,7 +128,7 @@ actor {
             createdAt = Int.toText(Time.now());
         };
         posts.put(postId, post);
-        Debug.print("Created post: " # Nat.toText(postId) # " in category: " # category);
+        Debug.print("Created post: " # Nat.toText(postId) # " in category: " # category # " at " # post.createdAt);
         postId
     };
 
