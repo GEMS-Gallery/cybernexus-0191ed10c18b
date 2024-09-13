@@ -35,7 +35,7 @@ actor {
     stable var nextPostId : PostId = 0;
     stable var nextCommentId : CommentId = 0;
     
-    let categories : [Text] = ["Red Team", "Pen Testing", "Cryptography", "Network Security", "Web Security"];
+    let categories : [Text] = ["Red Team", "Pen Testing", "Cryptography", "Network Security", "Web Security", "Malware Analysis"];
     
     let posts = HashMap.HashMap<PostId, Post>(0, Nat.equal, Hash.hash);
     let comments = HashMap.HashMap<CommentId, Comment>(0, Nat.equal, Hash.hash);
